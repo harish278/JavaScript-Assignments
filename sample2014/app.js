@@ -1,7 +1,6 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -10,6 +9,7 @@ var users = require('./routes/users');
 
 var app = express();
 
+// Winston logger to log on per day basis
 var logger = require('winston');
 logger.add(logger.transports.File,{ filename: 'somefile.log' });
 logger.add(logger.transports.DailyRotateFile, {datePattern:'.yyyy-MM-dd', filename: 'newlogs.log'});
@@ -35,7 +35,8 @@ test_cdb.list(function(err, body) {
         
       test_cdb.get(doc.id, function(err, buffer) {
       if (!err) {
-        //console.log(doc.id + " request time: " + buffer.req_time + " response time: " + buffer.res_time);
+        /*console.log(doc.id + " request time: " + buffer.req_time + " response time: " 
+            +buffer.res_time);*/
             if((buffer.res_time-buffer.req_time) > 2){
                // console.log("Message has to be sent to cell");
                 {
@@ -59,9 +60,14 @@ test_cdb.list(function(err, body) {
 
     Spreadsheet.load({
     debug: true,
+
+    // Here in place of spreadsheet name and work sheet name I have used their ID's 
     spreadsheetId: "1roaLPNIi0pNfxCfjOZEjsKFit8Xo-62jHhy3YGF-_1Q",
     worksheetId: "od6",
+
     // OAuth Authentication for accessing spreadsheet
+    // I have used my gmail account's spreadsheet authentication details
+    // You can do the same by setting up your own service mail
     oauth : {
       email: '825480284253-9egbgu9jq55obdt6iroqr1orlsdi488p@developer.gserviceaccount.com',
       keyFile: 'myproject.pem'
@@ -84,7 +90,8 @@ test_cdb.list(function(err, body) {
             sheetRowNum[sheetRowCount][sheetColumnCount] = DBIDArray[idcount++];
             //console.dir(sheetRowNum);
             spreadsheet.add(sheetRowNum);
-            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '+ sheetColumnCount);
+            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '
+                +sheetColumnCount);
     }
 
     // Adding second column to spreadsheet
@@ -98,7 +105,8 @@ test_cdb.list(function(err, body) {
             sheetRowNum[sheetRowCount][sheetColumnCount] = DBKeyArray[keycount++];
             //console.dir(sheetRowNum);
             spreadsheet.add(sheetRowNum);
-            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '+ sheetColumnCount);
+            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '
+                +sheetColumnCount);
     }
 
     // Adding third column to spreadsheet
@@ -112,7 +120,8 @@ test_cdb.list(function(err, body) {
             sheetRowNum[sheetRowCount][sheetColumnCount] = requestTimeFromDB[reqKeyCount++];
             //console.dir(sheetRowNum);
             spreadsheet.add(sheetRowNum);
-            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '+ sheetColumnCount);
+            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '
+                +sheetColumnCount);
     }
 
     // Adding fourth column to spreadsheet
@@ -126,7 +135,8 @@ test_cdb.list(function(err, body) {
             sheetRowNum[sheetRowCount][sheetColumnCount] = responseTimeFromDB[resKeycount++];
             //console.dir(sheetRowNum);
             spreadsheet.add(sheetRowNum);
-            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '+ sheetColumnCount);
+            logger.log('info', 'Sperad Sheet updated row: '+sheetRowCount+ ' and column: '
+                +sheetColumnCount);
     }
     
     spreadsheet.send(function(err) {
